@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <select name="assigned_employees[]" multiple required>
                         <?php if ($employees_result->num_rows > 0): ?>
                             <?php while ($employee = $employees_result->fetch_assoc()): ?>
-                                <option value="<?php echo $employee['id']; ?>">
+                                <option value="<?php echo $employee['name']; ?>">
                                     <?php echo htmlspecialchars($employee['name']); ?>
                                 </option>
                             <?php endwhile; ?>
