@@ -26,10 +26,33 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
+    color: #333
 }
 
 .inputField {
     margin-bottom: 15px;
+}
+
+
+.inputField input,
+.inputField select,
+.inputField textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+textarea {
+    resize: none;
+}
+
+small {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
 }
 
 input {

@@ -29,6 +29,12 @@ if (!$result) {
             <?php include 'sidebar.php'; ?>
         </div>
         <div class="manage">
+
+        <div style="text-align: right; margin-bottom: 15px;">
+            <a href="createTask.php" style="padding: 10px 20px; background: black; color: white; text-decoration: none; border-radius: 5px;">Add Tasks</a>
+        </div>
+
+
             <h1>All Tasks</h1>
             <table border="1">
                 <thead>
@@ -54,7 +60,7 @@ if (!$result) {
                                 <td><?php echo htmlspecialchars($task['start_time']); ?></td>
                                 <td><?php echo htmlspecialchars($task['deadline']); ?></td>
                                 <td><?php echo htmlspecialchars($task['task_details']); ?></td>
-                                <td><?php echo htmlspecialchars($task['progress']) . '%'; ?></td>
+                                <td><?php echo htmlspecialchars($task['progress']); ?></td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
