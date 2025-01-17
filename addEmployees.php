@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             VALUES ('$id','$name', '$email', '$phone', '$designation', '$salary', '$hr')";
 
     if ($conn->query($sql) === TRUE) {
-        header("Location: dashboard.php"); // Redirect to dashboard after successful addition
+        header("Location: dashboard.php");
         exit;
     } else {
         $error = "Error: " . $sql . "<br>" . $conn->error;
