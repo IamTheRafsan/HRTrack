@@ -7,5 +7,6 @@
         <li><a href="viewAttendance.php">View Attendance</a></li>
         <li><a href="viewTasks.php">Tasks</a></li>
         <li><a href="salary.php">Salary</a></li>
+        <li><a href="leave.php">Leave</a></li>
     </ul>
 </div>
