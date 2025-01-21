@@ -1,14 +1,22 @@
 <?php
 include 'databaseConnection.php';
 
-$sql =  "SELECT task_id, project_id, task_name, assigned_employees, start_time, deadline, task_details, progress FROM tasks"; 
+$LoggedInEmployeeID = "Mamun Sarkar";
+
+$LoggedInEmployeeID = $conn->real_escape_string($LoggedInEmployeeID);
+
+$sql =  "
+SELECT task_id, project_id, task_name, assigned_employees, start_time, deadline, task_details, progress 
+FROM tasks 
+WHERE assigned_employees LIKE '%$LoggedInEmployeeID%'";
+
 $result = $conn->query($sql);
 
 if (!$result) {
     die("SQL Error: " . $conn->error);
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,10 +38,6 @@ if (!$result) {
         </div>
         <div class="manage">
 
-        <div style="text-align: right; margin-bottom: 15px;">
-            <a href="createTask.php" style="padding: 10px 20px; background: black; color: white; text-decoration: none; border-radius: 5px;">Add Tasks</a>
-        </div>
-
 
             <h1>All Tasks</h1>
             <table border="1">
@@ -47,7 +51,6 @@ if (!$result) {
                         <th>Deadline</th>
                         <th>Details</th>
                         <th>Progress</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,10 +65,6 @@ if (!$result) {
                                 <td><?php echo htmlspecialchars($task['deadline']); ?></td>
                                 <td><?php echo htmlspecialchars($task['task_details']); ?></td>
                                 <td><?php echo htmlspecialchars($task['progress']); ?></td>
-                                <td>
-                                    <a href="updateTask.php?task_id=<?php echo $task['task_id']; ?>" 
-                                    style="padding: 5px 10px; background: blue; color: white; text-decoration: none; border-radius: 3px;">Update</a>
-                                </td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
