@@ -1,39 +1,12 @@
 <?php
 include 'databaseConnection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $leave_id = intval($_POST['leave_id']);
-    $status = $_POST['status'];
-
-
-    if (!in_array($status, ['Approved', 'Rejected'])) {
-        echo "Invalid status.";
-        exit;
-    }
-
-
-    $sql = "UPDATE leave_requests SET status = ? WHERE leave_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $status, $leave_id);
-
-
-    if ($stmt->execute()) {
-        echo "Leave request status updated successfully!";
-
-        header("Location: leave.php");
-        exit;
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    $stmt->close();
-}
-
+$LoggedInEmployeeId = '1';
 
 $query = "SELECT lr.leave_id, e.name AS employee_name, lr.subject, lr.reason, lr.leave_from, lr.leave_to, lr.status 
           FROM leave_requests lr 
           JOIN employees e ON lr.employee_id = e.id 
+          WHERE lr.employee_id = $LoggedInEmployeeId
           ORDER BY lr.request_date DESC";
 
 $result = $conn->query($query);
@@ -63,12 +36,16 @@ $result = $conn->query($query);
         <div class="dashboardContents">
             
         <?php
-        include 'sidebar.php';
+        include 'EmployeeSidebar.php';
         ?>
     
 
         </div>
         <div class="manage">
+
+        <div style="text-align: right; margin-bottom: 15px;">
+            <a href="applyLeave.php" style="padding: 10px 20px; background: black; color: white; text-decoration: none; border-radius: 5px;">Apply For Leave</a>
+        </div>
 
         <h1>Leave Requests</h1>
         
@@ -80,7 +57,6 @@ $result = $conn->query($query);
                 <th>Leave From</th>
                 <th>Leave To</th>
                 <th>Status</th>
-                <th>Action</th>
             </tr>
             
             <?php
@@ -92,16 +68,6 @@ $result = $conn->query($query);
                 echo "<td>{$row['leave_from']}</td>";
                 echo "<td>{$row['leave_to']}</td>";
                 echo "<td>{$row['status']}</td>";
-                echo "<td>
-                        <form action='leave.php' method='POST'>
-                            <input type='hidden' name='leave_id' value='{$row['leave_id']}'>
-                            <select name='status' required>
-                                <option value='Approved' " . ($row['status'] == 'Approved' ? 'selected' : '') . ">Approve</option>
-                                <option value='Rejected' " . ($row['status'] == 'Rejected' ? 'selected' : '') . ">Reject</option>
-                            </select>
-                            <button type='submit'>Update Status</button>
-                        </form>
-                      </td>";
                 echo "</tr>";
             }
             ?>
@@ -117,22 +83,4 @@ $result = $conn->query($query);
 </body>
 </html>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leave Management</title>
-    <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-    <div class="page">
-        
-    </div>
-</body>
-</html>
-
-<?php
-
-$conn->close();
-?>
+`
