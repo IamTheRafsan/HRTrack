@@ -1,16 +1,9 @@
 <?php
-$host = "localhost";
-$username = "root";
-$password = "";
-$dbname = "HR";
+include '../Control/databaseConnection.php';
+session_start();
 
-$conn = new mysqli($host, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 $sql = "SELECT id, name, email, phone, designation, salary FROM employees";
-$result = $conn->query($sql);
+$result = mysqli_query($conn, $sql);
 ?>
 
 
@@ -20,7 +13,7 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../Model/dashboard.css">
 </head>
 <body>
     <div class="top">
@@ -28,30 +21,29 @@ $result = $conn->query($sql);
             
         </div>
         <div class="center">
-            Hello, Mr. Rafsan
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
         </div>
         <div class="right">
-            right sidebar
         </div>
     </div>
     <div class="page">
-        <div class="dashboardContents">
+        <div class="menu">
             
         <?php
-        include 'sidebar.php';
+        include '../View/menu.php';
         ?>
     
 
         </div>
-        <div class="manage">
-
-        <div style="text-align: right; margin-bottom: 15px;">
-            <a href="addEmployees.php" style="padding: 10px 20px; background: black; color: white; text-decoration: none; border-radius: 5px;">Add Employee</a>
-        </div>
-
-
+        <div class="mainContent">
         <h2>Employee List</h2>
-            <table class="table" border="1" style="width: 100%; text-align: left; ">
+            <table class="table" border="1" style="width: 100%; text-align: left;">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -60,7 +52,6 @@ $result = $conn->query($sql);
                         <th>Phone</th>
                         <th>Designation</th>
                         <th>Salary</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,20 +64,6 @@ $result = $conn->query($sql);
                                 <td><?php echo $row['phone']; ?></td>
                                 <td><?php echo $row['designation']; ?></td>
                                 <td><?php echo $row['salary']; ?></td>
-                                <td>
-
-                                    <a href="editEmployee.php?id=<?php echo $row['id']; ?>&name=<?php echo urlencode($row['name']); ?>&email=<?php echo urlencode($row['email']); ?>&phone=<?php echo urlencode($row['phone']); ?>&designation=<?php echo urlencode($row['designation']); ?>&salary=<?php echo urlencode($row['salary']); ?>" 
-                                       style="padding: 5px; background: blue; color: white; text-decoration: none; border-radius: 5px;">
-                                       Edit
-                                    </a>
-
-                                    <a href="deleteEmployee.php?id=<?php echo $row['id']; ?>" 
-                                        style="padding: 5px; background: red; color: white; text-decoration: none; border-radius: 5px;"
-                                        onclick="return confirm('Are you sure you want to delete this employee?');">
-                                        Delete
-                                    </a>
-
-                                </td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
@@ -99,7 +76,6 @@ $result = $conn->query($sql);
             
         </div>
         <div class="rightSidebar">
-            others
         </div>
     </div>
 </body>

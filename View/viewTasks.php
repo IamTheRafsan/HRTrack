@@ -1,22 +1,14 @@
 <?php
-include 'databaseConnection.php';
+include '../Control/databaseConnection.php';
 
-$LoggedInEmployeeID = "Mamun Sarkar";
-
-$LoggedInEmployeeID = $conn->real_escape_string($LoggedInEmployeeID);
-
-$sql =  "
-SELECT task_id, project_id, task_name, assigned_employees, start_time, deadline, task_details, progress 
-FROM tasks 
-WHERE assigned_employees LIKE '%$LoggedInEmployeeID%'";
-
-$result = $conn->query($sql);
+$sql =  "SELECT task_id, project_id, task_name, assigned_employees, start_time, deadline, task_details, progress FROM tasks"; 
+$result = mysqli_query($conn, $sql);
 
 if (!$result) {
     die("SQL Error: " . $conn->error);
 }
-?>
 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,19 +16,27 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Tasks</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../Model/dashboard.css">
 </head>
 <body>
     <div class="top">
         <div class="left"></div>
-        <div class="center">Task Dashboard</div>
-        <div class="right">Right Sidebar</div>
+        <div class="center">
+
+        </div>
+        <div class="right">
+            
+        </div>
     </div>
     <div class="page">
-        <div class="dashboardContents">
-            <?php include 'sidebar.php'; ?>
+        <div class="menu">
+            <?php include 'menu.php'; ?>
         </div>
-        <div class="manage">
+        <div class="mainContent">
+
+        <div style="text-align: right; margin-bottom: 15px;">
+            <a href="createTask.php" style="padding: 10px 20px; background: black; color: white; text-decoration: none; border-radius: 5px;">Add Tasks</a>
+        </div>
 
 
             <h1>All Tasks</h1>
@@ -51,6 +51,7 @@ if (!$result) {
                         <th>Deadline</th>
                         <th>Details</th>
                         <th>Progress</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,6 +66,10 @@ if (!$result) {
                                 <td><?php echo htmlspecialchars($task['deadline']); ?></td>
                                 <td><?php echo htmlspecialchars($task['task_details']); ?></td>
                                 <td><?php echo htmlspecialchars($task['progress']); ?></td>
+                                <td>
+                                    <a href="updateTask.php?task_id=<?php echo $task['task_id']; ?>" 
+                                    style="padding: 5px 10px; background: blue; color: white; text-decoration: none; border-radius: 3px;">Update</a>
+                                </td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
@@ -75,7 +80,7 @@ if (!$result) {
                 </tbody>
             </table>
         </div>
-        <div class="rightSidebar">Others</div>
+        <div class="rightSidebar"></div>
     </div>
 </body>
 </html>

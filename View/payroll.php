@@ -5,21 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payroll Management</title>
 
-    <link rel='stylesheet' href="style.css"/>
+    <link rel='stylesheet' href="../Model/style.css"/>
 </head>
 <body>
     
-    <form class="formContainer" action="addSalary.php" method="POST">
+    <form class="formContainer" action="../Control/addSalary.php" method="POST">
         <h1>Payroll Management</h1>
 
         <div class="inputField">
             <label for="employee_id">Select Employee:</label>
             <select name="employee_id" required>
                 <?php
-                include 'databaseConnection.php';
+                include '../Control/databaseConnection.php';
+                
                 $result = $conn->query("SELECT id, name FROM employees");
-                while ($row = $result->fetch_assoc()) {
-                    echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                
+                while ($row = $result->fetch_row()) {
+                    echo "<option value='{$row[0]}'>{$row[1]}</option>";
                 }
                 ?>
             </select>

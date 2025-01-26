@@ -1,5 +1,5 @@
 <?php
-include 'databaseConnection.php';
+include '../Control/databaseConnection.php';
 
 $task_id = isset($_GET['task_id']) ? intval($_GET['task_id']) : 0;
 
@@ -8,31 +8,31 @@ if ($task_id === 0) {
 }
 
 $sql = "SELECT * FROM tasks WHERE task_id = $task_id";
-$result = $conn->query($sql);
+$result = mysqli_query($conn, $sql);
 
-if ($result->num_rows === 0) {
+if (mysqli_num_rows($result) === 0) {
     die("Task not found.");
 }
 
-$task = $result->fetch_assoc();
+$task = mysqli_fetch_array($result);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $task_name = $conn->real_escape_string($_POST['task_name']);
-    $deadline = $conn->real_escape_string($_POST['deadline']);
-    $task_details = $conn->real_escape_string($_POST['task_details']);
-    $progress = $conn->real_escape_string($_POST['progress']);
+    $task_name = $_POST['task_name'];
+    $deadline = $_POST['deadline'];
+    $task_details = $_POST['task_details'];
+    $progress = $_POST['progress'];
 
     $update_sql = "
         UPDATE tasks
         SET deadline = '$deadline', task_details = '$task_details', progress = '$progress'
         WHERE task_id = $task_id";
 
-    if ($conn->query($update_sql)) {
+    if (mysqli_query($conn, $update_sql)) {
         echo "Task updated successfully!";
         header("Location: viewTasks.php");
         exit();
     } else {
-        echo "Error updating task: " . $conn->error;
+        echo "Error updating task: " . mysqli_error($conn);
     }
 }
 ?>

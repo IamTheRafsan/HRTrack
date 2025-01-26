@@ -1,5 +1,10 @@
 <?php
-include 'databaseConnection.php';
+include '../Control/databaseConnection.php';
+
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -13,21 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-    $sql = "UPDATE leave_requests SET status = ? WHERE leave_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $status, $leave_id);
+    $sql = "UPDATE leave_requests SET status = '$status' WHERE leave_id = $leave_id";
 
 
-    if ($stmt->execute()) {
-        echo "Leave request status updated successfully!";
 
+    if (mysqli_query($conn, $sql)) {
+        echo '<script>alert("Leave request status updated successfully");</script>';
         header("Location: leave.php");
         exit;
     } else {
-        echo "Error: " . $stmt->error;
+        echo "Error: " . mysqli_error($conn);
     }
-
-    $stmt->close();
 }
 
 
@@ -36,7 +37,7 @@ $query = "SELECT lr.leave_id, e.name AS employee_name, lr.subject, lr.reason, lr
           JOIN employees e ON lr.employee_id = e.id 
           ORDER BY lr.request_date DESC";
 
-$result = $conn->query($query);
+$result = mysqli_query($conn, $query);
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +46,7 @@ $result = $conn->query($query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../Model/dashboard.css">
 </head>
 <body>
     <div class="top">
@@ -53,22 +54,20 @@ $result = $conn->query($query);
             
         </div>
         <div class="center">
-            Hello, Mr. Rafsan
         </div>
         <div class="right">
-            right sidebar
         </div>
     </div>
     <div class="page">
-        <div class="dashboardContents">
+        <div class="menu">
             
         <?php
-        include 'sidebar.php';
+        include 'menu.php';
         ?>
     
 
         </div>
-        <div class="manage">
+        <div class="mainContent">
 
         <h1>Leave Requests</h1>
         
@@ -84,20 +83,20 @@ $result = $conn->query($query);
             </tr>
             
             <?php
-            while ($row = $result->fetch_assoc()) {
+            while ($row = mysqli_fetch_row($result)) {
                 echo "<tr>";
-                echo "<td>{$row['employee_name']}</td>";
-                echo "<td>{$row['subject']}</td>";
-                echo "<td>{$row['reason']}</td>";
-                echo "<td>{$row['leave_from']}</td>";
-                echo "<td>{$row['leave_to']}</td>";
-                echo "<td>{$row['status']}</td>";
+                echo "<td>{$row[1]}</td>"; 
+                echo "<td>{$row[2]}</td>"; 
+                echo "<td>{$row[3]}</td>"; 
+                echo "<td>{$row[4]}</td>"; 
+                echo "<td>{$row[5]}</td>"; 
+                echo "<td>{$row[6]}</td>"; 
                 echo "<td>
                         <form action='leave.php' method='POST'>
-                            <input type='hidden' name='leave_id' value='{$row['leave_id']}'>
+                            <input type='hidden' name='leave_id' value='{$row[0]}'>
                             <select name='status' required>
-                                <option value='Approved' " . ($row['status'] == 'Approved' ? 'selected' : '') . ">Approve</option>
-                                <option value='Rejected' " . ($row['status'] == 'Rejected' ? 'selected' : '') . ">Reject</option>
+                                <option value='Approved' " . ($row[6] == 'Approved' ? 'selected' : '') . ">Approve</option>
+                                <option value='Rejected' " . ($row[6] == 'Rejected' ? 'selected' : '') . ">Reject</option>
                             </select>
                             <button type='submit'>Update Status</button>
                         </form>
@@ -111,28 +110,8 @@ $result = $conn->query($query);
             
         </div>
         <div class="rightSidebar">
-            others
         </div>
     </div>
 </body>
 </html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leave Management</title>
-    <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-    <div class="page">
-        
-    </div>
-</body>
-</html>
-
-<?php
-
-$conn->close();
 ?>

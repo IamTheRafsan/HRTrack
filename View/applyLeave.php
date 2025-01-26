@@ -1,35 +1,28 @@
 <?php
-include 'databaseConnection.php';
-$error = '';
+include '../Control/databaseConnection.php';
 
 $LoggedInEmployeeID = 1;
+$error = '';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $subject = $conn->real_escape_string($_POST['subject']);
-    $reason = $conn->real_escape_string($_POST['reason']);
-    $leaveFrom = $conn->real_escape_string($_POST['leaveFrom']);
-    $leaveTo = $conn->real_escape_string($_POST['leaveTo']);
+    $subject = $_POST['subject'];
+    $reason = $_POST['reason'];
+    $leaveFrom = $_POST['leaveFrom'];
+    $leaveTo = $_POST['leaveTo'];
     
     if (empty($subject) || empty($reason) || empty($leaveFrom) || empty($leaveTo)) {
         $error = "All fields are required.";
     } else {
         $sql = "INSERT INTO leave_requests (employee_id, subject, reason, leave_from, leave_to) 
-                VALUES (?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        
-        if ($stmt) {
-            $stmt->bind_param("issss", $LoggedInEmployeeID, $subject, $reason, $leaveFrom, $leaveTo);
-            
-            if ($stmt->execute()) {
-                header("Location: EmployeeLeave.php");
-                exit;
-            } else {
-                $error = "Error: " . $stmt->error;
-            }
-            
-            $stmt->close();
+                VALUES ($LoggedInEmployeeID, '$subject', '$reason', '$leaveFrom', '$leaveTo')";
+
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            header("Location: EmployeeLeave.php");
+            exit;
         } else {
-            $error = "Error preparing statement: " . $conn->error;
+            echo '<script>alert("Error: ' . mysqli_error($conn) . '");</script>';
         }
     }
 }
@@ -42,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Employee</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../Model/style.css">
 </head>
 <body>
     <div class="formContainer">

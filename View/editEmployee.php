@@ -1,5 +1,5 @@
 <?php
-
+include '../Control/databaseConnection.php';
 $id = $_GET['id'];
 $name = $_GET['name'];
 $email = $_GET['email'];
@@ -7,17 +7,7 @@ $phone = $_GET['phone'];
 $designation = $_GET['designation'];
 $salary = $_GET['salary'];
 
-$host = "localhost";
-$username = "root";
-$password = "";
-$dbname = "HR";
 
-
-$conn = new mysqli($host, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 if($_SERVER["REQUEST_METHOD"]=='POST'){
 
@@ -30,12 +20,12 @@ if($_SERVER["REQUEST_METHOD"]=='POST'){
 
     $update_sql = "UPDATE employees SET name='$newName', email='$newEmail', phone='$newPhone', designation='$newDesignation', salary='$newSalary' WHERE id=$id";
 
-    if ($conn->query($update_sql) === TRUE) {
+    if (mysqli_query($conn, $update_sql)) {
         echo "Employee updated successfully.";
         header("Location: employees.php");
         exit;
     } else {
-        echo "Error updating employee: " . $conn->error;
+        echo "Error updating employee: ";
     }
 
 }
@@ -49,7 +39,7 @@ if($_SERVER["REQUEST_METHOD"]=='POST'){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Employee</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../Model/style.css">
 </head>
 <body>
     <div class="formContainer">

@@ -6,7 +6,7 @@ body {
 .top{
     width: 100%;
     display: flex;
-    background: #F2FAF5;
+    background: #F6FF75;
 
 }
 
@@ -37,12 +37,12 @@ body {
 .page{
     width: 100%;
     height: 100vh;
-    background: #F2FAF5;
+    background: #F6FF75;
     display: flex;
 
 }
 
-.dashboardContents{
+.menu{
     width: 15%;
     padding: 20px;
     text-align: center;
@@ -55,7 +55,7 @@ body {
 
 }
 
-.manage{
+.mainContent{
     width: 70%;
     margin: 5px;
     text-align: start;
@@ -73,7 +73,7 @@ body {
 .sidebar {
     width: 13%;
     height: 100vh;
-    background: #F2FAF5;
+    background: #F6FF75;
     padding: 20px;
     position: fixed;
     left: 0;

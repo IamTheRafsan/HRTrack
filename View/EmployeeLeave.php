@@ -1,5 +1,5 @@
 <?php
-include 'databaseConnection.php';
+include '../Control/databaseConnection.php';
 
 $LoggedInEmployeeId = '1';
 
@@ -18,7 +18,7 @@ $result = $conn->query($query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../Model/dashboard.css">
 </head>
 <body>
     <div class="top">
@@ -26,25 +26,23 @@ $result = $conn->query($query);
             
         </div>
         <div class="center">
-            Hello, Mr. Rafsan
         </div>
         <div class="right">
-            right sidebar
         </div>
     </div>
     <div class="page">
-        <div class="dashboardContents">
+        <div class="menu">
             
         <?php
-        include 'EmployeeSidebar.php';
+        include 'EmployeeMenu.php';
         ?>
     
 
         </div>
-        <div class="manage">
+        <div class="mainContent">
 
         <div style="text-align: right; margin-bottom: 15px;">
-            <a href="applyLeave.php" style="padding: 10px 20px; background: black; color: white; text-decoration: none; border-radius: 5px;">Apply For Leave</a>
+            <a href="../View/applyLeave.php" style="padding: 10px 20px; background: black; color: white; text-decoration: none; border-radius: 5px;">Apply For Leave</a>
         </div>
 
         <h1>Leave Requests</h1>
@@ -60,24 +58,24 @@ $result = $conn->query($query);
             </tr>
             
             <?php
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>{$row['employee_name']}</td>";
-                echo "<td>{$row['subject']}</td>";
-                echo "<td>{$row['reason']}</td>";
-                echo "<td>{$row['leave_from']}</td>";
-                echo "<td>{$row['leave_to']}</td>";
-                echo "<td>{$row['status']}</td>";
-                echo "</tr>";
-            }
+                while ($row = mysqli_fetch_array($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['employee_name'] . "</td>";
+                    echo "<td>" . $row['subject'] . "</td>";
+                    echo "<td>" . $row['reason'] . "</td>";
+                    echo "<td>" . $row['leave_from'] . "</td>";
+                    echo "<td>" . $row['leave_to'] . "</td>";
+                    echo "<td>" . $row['status'] . "</td>";
+                    echo "</tr>";
+                }
             ?>
+
         </table>
 
 
             
         </div>
         <div class="rightSidebar">
-            others
         </div>
     </div>
 </body>

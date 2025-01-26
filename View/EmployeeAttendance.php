@@ -1,18 +1,21 @@
 <?php
-include 'databaseConnection.php';
+include '../Control/databaseConnection.php';
+
 
 $LoggedInEmployeeId = '1';
 
 $sql = "SELECT a.date, e.name, a.status
         FROM attendance a
         JOIN employees e ON a.employee_id = e.id
-        WHERE a.employee_id = ?
+        WHERE a.employee_id = $LoggedInEmployeeId
         ORDER BY a.date DESC";
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $LoggedInEmployeeId);
-$stmt->execute();
-$attendanceRecords = $stmt->get_result();
+$attendanceRecords = mysqli_query($conn, $sql);
+
+if (!$attendanceRecords) {
+    die("Error retrieving records: " . mysqli_error($conn));
+}
+
 ?>
 
 
@@ -22,7 +25,7 @@ $attendanceRecords = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../Model/dashboard.css">
 </head>
 <body>
     <div class="top">
@@ -30,21 +33,19 @@ $attendanceRecords = $stmt->get_result();
             
         </div>
         <div class="center">
-            Hello, Mr. Rafsan
         </div>
         <div class="right">
-            right sidebar
         </div>
     </div>
     <div class="page">
-        <div class="dashboardContents">
+        <div class="menu">
             
         <?php
-        include 'EmployeeSidebar.php';
+        include 'EmployeeMenu.php';
         ?>
 
         </div>
-        <div class="manage">
+        <div class="mainContent">
 
         <h1>Attendance Records</h1>
         <table border="1" style="width: 100%; margin-top: 20px;">
@@ -56,25 +57,30 @@ $attendanceRecords = $stmt->get_result();
             </tr>
         </thead>
         <tbody>
-            <?php if ($attendanceRecords->num_rows > 0): ?>
-                <?php while ($row = $attendanceRecords->fetch_assoc()): ?>
+        <?php 
+            if ($attendanceRecords->num_rows > 0): 
+                while ($row = $attendanceRecords->fetch_row()): 
+            ?>
                     <tr>
-                        <td><?php echo $row['date']; ?></td>
-                        <td><?php echo $row['name']; ?></td>
-                        <td><?php echo $row['status']; ?></td>
+                        <td><?php echo $row[0]; ?></td>
+                        <td><?php echo $row[1]; ?></td>
+                        <td><?php echo $row[2]; ?></td>
                     </tr>
-                <?php endwhile; ?>
-                <?php else: ?>
+            <?php 
+                endwhile; 
+            else: 
+            ?>
                 <tr>
                     <td colspan="3">No attendance records found.</td>
                 </tr>
-            <?php endif; ?>
+            <?php 
+            endif; 
+            ?>
         </tbody>
         </table>
 
         </div>
         <div class="rightSidebar">
-            others
         </div>
     </div>
 </body>
