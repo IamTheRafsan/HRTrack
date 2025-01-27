@@ -1,9 +1,10 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
+
 include '../Control/databaseConnection.php';
 session_start();
 
-$sql = "SELECT id, name, email, phone, designation, salary FROM employees";
-$result = mysqli_query($conn, $sql);
 ?>
 
 
@@ -42,37 +43,46 @@ $result = mysqli_query($conn, $sql);
 
         </div>
         <div class="mainContent">
-        <h2>Employee List</h2>
-            <table class="table" border="1" style="width: 100%; text-align: left;">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Designation</th>
-                        <th>Salary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($result->num_rows > 0): ?>
-                        <?php while($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo $row['id']; ?></td>
-                                <td><?php echo $row['name']; ?></td>
-                                <td><?php echo $row['email']; ?></td>
-                                <td><?php echo $row['phone']; ?></td>
-                                <td><?php echo $row['designation']; ?></td>
-                                <td><?php echo $row['salary']; ?></td>
-                            </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="7">No employees found.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+        <?php
+
+            $sql = "SELECT id, name, email, phone, designation, salary FROM employees";
+            $result = mysqli_query($conn, $sql);
+            
+            echo '<h2>Employee List</h2>';
+            echo '<table class="table" border="1" style="width: 100%; text-align: left;">';
+            echo '<thead>';
+            echo '<tr>';
+            echo '<th>ID</th>';
+            echo '<th>Name</th>';
+            echo '<th>Email</th>';
+            echo '<th>Phone</th>';
+            echo '<th>Designation</th>';
+            echo '<th>Salary</th>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    echo '<tr>';
+                    echo '<td>' . $row['id'] . '</td>';
+                    echo '<td>' . $row['name'] . '</td>';
+                    echo '<td>' . $row['email'] . '</td>';
+                    echo '<td>' . $row['phone'] . '</td>';
+                    echo '<td>' . $row['designation'] . '</td>';
+                    echo '<td>' . $row['salary'] . '</td>';
+                    echo '</tr>';
+                }
+            } else {
+                echo '<tr>';
+                echo '<td colspan="6">No employees found.</td>';
+                echo '</tr>';
+            }
+
+            echo '</tbody>';
+            echo '</table>';
+            echo '</div>';
+        ?>
             
         </div>
         <div class="rightSidebar">

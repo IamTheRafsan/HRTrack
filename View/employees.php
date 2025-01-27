@@ -1,4 +1,7 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
+
 include '../Control/databaseConnection.php';
 
 $sql = "SELECT id, name, email, phone, designation, salary FROM employees";
@@ -9,7 +12,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         $employees[] = $row; 
     }
 }
-?>
+
 ?>
 
 
@@ -27,6 +30,13 @@ if ($result && mysqli_num_rows($result) > 0) {
             
         </div>
         <div class="center">
+        <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
         </div>
         <div class="right">
         </div>
