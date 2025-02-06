@@ -1,4 +1,7 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
+
 include '../Control/databaseConnection.php';
 
 $task_id = isset($_GET['task_id']) ? intval($_GET['task_id']) : 0;
@@ -29,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (mysqli_query($conn, $update_sql)) {
         echo "Task updated successfully!";
-        header("Location: viewTasks.php");
+        header("Location: ../View/viewTasks.php");
         exit();
     } else {
         echo "Error updating task: " . mysqli_error($conn);

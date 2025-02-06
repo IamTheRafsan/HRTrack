@@ -1,3 +1,9 @@
+<?php
+require_once '../Control/auth.php';
+checkLogin();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +15,15 @@
 <body>
     <div class="top">
         <div class="left"></div>
-        <div class="center"></div>
+        <div class="center">
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
+        </div>
         <div class="right"></div>
     </div>
     <div class="page">
@@ -30,6 +44,9 @@
                     
                 </tbody>
             </table>
+
+
+            
         </div>
         <div class="rightSidebar"></div>
     </div>

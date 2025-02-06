@@ -21,13 +21,13 @@ body {
 .center{
     width: 70%;
     padding: 10px;
-    margin: 5px;
+    margin: 0px;
     text-align: start;
-    border-radius: 15px;
+    border-radius: 0px;
 }
 
 .right{
-    width: 15%;
+    width: 0%;
     padding: 10px;
     margin: 5px;
     text-align: center;
@@ -49,19 +49,22 @@ body {
 }
 
 .rightSidebar{
-    width: 15%;
+    width: 0%;
     padding: 20px;
     text-align: center;
 
 }
 
 .mainContent{
-    width: 70%;
+    width: 80%;
+    height: 100vh;
     margin: 5px;
     text-align: start;
     padding: 20px;
+    padding-top: 30px;
     background: white;
     border-radius: 18px;
+    overflow-y: auto;
 
 }
 
@@ -71,7 +74,7 @@ body {
 
 
 .sidebar {
-    width: 13%;
+    width: 15%;
     height: 100vh;
     background: #F6FF75;
     padding: 20px;
@@ -87,38 +90,22 @@ body {
     margin-top: 40px;
 }
 
-.sidebar ul li {
-    margin: 15px 0;
-}
+
 
 .sidebar ul li a {
-    text-decoration: none;
-    color: #333;
+    display: block;
+    padding: 12px 15px;
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
     font-weight: bold;
+    margin: 7px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
 .sidebar ul li a:hover {
-    color: white;
-    background: #D3F36B;
-}
-
-
-.add-button {
-    padding: 10px 20px;
-    background: green;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.edit-button {
-    padding: 5px 10px;
-    background: black;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.edit-button:hover, .add-button:hover {
-    background: darkgreen;
+    background-color: #D3F36B;
+    color: #000000;
 }

@@ -1,4 +1,6 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
 include '../Control/databaseConnection.php';
 $id = $_GET['id'];
 $name = $_GET['name'];

@@ -1,35 +1,15 @@
 <?php
+
+require_once '../Control/auth.php';
+checkLogin();
+
+
 include '../Control/databaseConnection.php';
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $leave_id = intval($_POST['leave_id']);
-    $status = $_POST['status'];
-
-
-    if (!in_array($status, ['Approved', 'Rejected'])) {
-        echo "Invalid status.";
-        exit;
-    }
-
-
-    $sql = "UPDATE leave_requests SET status = '$status' WHERE leave_id = $leave_id";
-
-
-
-    if (mysqli_query($conn, $sql)) {
-        echo '<script>alert("Leave request status updated successfully");</script>';
-        header("Location: leave.php");
-        exit;
-    } else {
-        echo "Error: " . mysqli_error($conn);
-    }
-}
 
 
 $query = "SELECT lr.leave_id, e.name AS employee_name, lr.subject, lr.reason, lr.leave_from, lr.leave_to, lr.status 
@@ -54,6 +34,13 @@ $result = mysqli_query($conn, $query);
             
         </div>
         <div class="center">
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
         </div>
         <div class="right">
         </div>
@@ -92,7 +79,7 @@ $result = mysqli_query($conn, $query);
                 echo "<td>{$row[5]}</td>"; 
                 echo "<td>{$row[6]}</td>"; 
                 echo "<td>
-                        <form action='leave.php' method='POST'>
+                        <form action='../Control/leaveController.php' method='POST'>
                             <input type='hidden' name='leave_id' value='{$row[0]}'>
                             <select name='status' required>
                                 <option value='Approved' " . ($row[6] == 'Approved' ? 'selected' : '') . ">Approve</option>

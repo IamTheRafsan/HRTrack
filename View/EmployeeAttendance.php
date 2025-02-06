@@ -1,8 +1,10 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
+
 include '../Control/databaseConnection.php';
 
-
-$LoggedInEmployeeId = '1';
+$LoggedInEmployeeId = $_SESSION['userId'];
 
 $sql = "SELECT a.date, e.name, a.status
         FROM attendance a
@@ -33,6 +35,13 @@ if (!$attendanceRecords) {
             
         </div>
         <div class="center">
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
         </div>
         <div class="right">
         </div>

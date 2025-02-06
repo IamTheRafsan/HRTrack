@@ -1,4 +1,7 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
+
 include '../Control/databaseConnection.php';
 
 $sql =  "SELECT task_id, project_id, task_name, assigned_employees, start_time, deadline, task_details, progress FROM tasks"; 
@@ -22,6 +25,13 @@ if (!$result) {
     <div class="top">
         <div class="left"></div>
         <div class="center">
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
 
         </div>
         <div class="right">
@@ -67,7 +77,7 @@ if (!$result) {
                                 <td><?php echo htmlspecialchars($task['task_details']); ?></td>
                                 <td><?php echo htmlspecialchars($task['progress']); ?></td>
                                 <td>
-                                    <a href="updateTask.php?task_id=<?php echo $task['task_id']; ?>" 
+                                    <a href="../View/updateTask.php?task_id=<?php echo $task['task_id']; ?>" 
                                     style="padding: 5px 10px; background: blue; color: white; text-decoration: none; border-radius: 3px;">Update</a>
                                 </td>
                             </tr>

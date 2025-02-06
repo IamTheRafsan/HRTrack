@@ -1,4 +1,7 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
+
 include '../Control/databaseConnection.php';
 $sql = "SELECT * FROM employees";
 $employees = mysqli_query($conn, $sql);
@@ -7,22 +10,6 @@ if (!$employees) {
     die("Error fetching employees: " . mysqli_error($conn));
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $date = mysqli_real_escape_string($conn, $_POST['date']);
-
-    foreach ($_POST['attendance'] as $employee_id => $status) {
-        $employee_id = intval($employee_id); 
-        $status = mysqli_real_escape_string($conn, $status);
-
-        $query = "INSERT INTO attendance (employee_id, date, status) VALUES ($employee_id, '$date', '$status')";
-
-        if (!mysqli_query($conn, $query)) {
-            echo "Error marking attendance for Employee ID $employee_id: " . mysqli_error($conn);
-        }
-    }
-
-    echo '<script>alert("Attendence marted successfully!");</script>';
-}
 ?>
 
 
@@ -41,6 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
         </div>
         <div class="center">
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
         </div>
         <div class="right">
         </div>
@@ -57,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="mainContent">
 
         <h1>Mark Attendance</h1>
-        <form method="POST" action="">
+        <form method="POST" action="../Control/attendanceController.php">
             <label for="date">Date:</label>
             <input type="date" name="date" id="date" required>
             <table border="1" style="width: 100%; margin-top: 20px;">
@@ -88,6 +82,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </table>
         <button type="submit">Submit Attendance</button>
         </form>
+
+
+
+
+        <h1>Attendance Records</h1>
+            <table id="attendanceTable" border="1" style="width: 100%; margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Employee Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+
+
+            <script src="../Control/getAttendance.js"></script>
+
+    <script>
+        window.onload = function() {
+            fetchAttendance();
+        };
+    </script>
+
+
+
 
         </div>
         <div class="rightSidebar">

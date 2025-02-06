@@ -1,31 +1,28 @@
 <?php
-session_start();
-include '../Control/databaseConnection.php'; 
+require_once '../Control/auth.php';
+checkLogin();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $phone = $_POST['phone'];
-    $designation = $_POST['designation'];
-    $salary = $_POST['salary'];
-    $hr = $_POST['hr'];
-    $id = $_POST['id'];
+    $name = $conn->real_escape_string($_POST['name']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $password = $conn->real_escape_string($_POST['password']);
+    $phone = $conn->real_escape_string($_POST['phone']);
+    $designation = $conn->real_escape_string($_POST['designation']);
+    $salary = $conn->real_escape_string($_POST['salary']);
+    $hr = $conn->real_escape_string($_POST['hr']);
+    $id = $conn->real_escape_string($_POST['id']);
     
+    include '../Control/databaseConnection.php';
 
-    if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($designation) || empty($salary) || empty($hr) || empty($id)) {
-        echo '<script>alert("All fields are required!");</script>';
+    $sql = "INSERT INTO employees (id, name, email, password, phone, designation, salary, hr) 
+    VALUES ($id, $name, $email , $password , $phone, $designation, $salary, $hr)";
+
+    if (mysqli_query($conn, $sql)) {
+        echo '<script>alert("Employee added successfully!");</script>';
+        header("Location: employees.php");
+        exit;
     } else {
-        $sql = "INSERT INTO employees (id, name, email, password, phone, designation, salary, hr) 
-                VALUES ('$id', '$name', '$email' , '$password' , '$phone', '$designation', '$salary', '$hr')";
-
-        if (mysqli_query($conn, $sql)) {
-            echo '<script>alert("Employee added successfully!");</script>';
-            header("Location: employees.php");
-            exit;
-        } else {
-            echo '<script>alert("Error adding employee: ' . mysqli_error($conn) . '");</script>';
-        }
+        echo '<script>alert("Error adding employee: ' . mysqli_error($conn) . '");</script>';
     }
 }
 ?>

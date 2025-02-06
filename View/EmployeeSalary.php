@@ -1,3 +1,7 @@
+<?php
+require_once '../Control/auth.php';
+checkLogin();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +12,16 @@
 </head>
 <body>
     <div class="top">
-        <div class="left">
-            
+        <div class="left">    
         </div>
         <div class="center">
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
         </div>
         <div class="right">
         </div>
@@ -29,8 +39,8 @@
 
         <?php
         include '../Control/databaseConnection.php';
-
-        $LoggedInEmployeeId = '1';
+        session_start();
+        $LoggedInEmployeeId = $_SESSION['userId'];
 
         $query = "SELECT p.*, e.name FROM payroll p JOIN employees e ON p.employee_id = e.id WHERE p.employee_id = $LoggedInEmployeeId";
         if (isset($_GET['month']) && isset($_GET['year'])) {

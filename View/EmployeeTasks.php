@@ -1,7 +1,11 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
+
 include '../Control/databaseConnection.php';
 
-$LoggedInEmployeeID = "Mamun Sarkar";
+session_start();
+$LoggedInEmployeeID = $_SESSION['userName'];
 
 $sql =  "
 SELECT task_id, project_id, task_name, assigned_employees, start_time, deadline, task_details, progress 
@@ -27,7 +31,15 @@ if (!$result) {
 <body>
     <div class="top">
         <div class="left"></div>
-        <div class="center"></div>
+        <div class="center">
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
+        </div>
         <div class="right"></div>
     </div>
     <div class="page">

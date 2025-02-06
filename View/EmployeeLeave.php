@@ -1,7 +1,9 @@
 <?php
+require_once '../Control/auth.php';
+checkLogin();
 include '../Control/databaseConnection.php';
-
-$LoggedInEmployeeId = '1';
+session_start();
+$LoggedInEmployeeId = $_SESSION['userId'];
 
 $query = "SELECT lr.leave_id, e.name AS employee_name, lr.subject, lr.reason, lr.leave_from, lr.leave_to, lr.status 
           FROM leave_requests lr 
@@ -26,6 +28,13 @@ $result = $conn->query($query);
             
         </div>
         <div class="center">
+            <?php
+            if (isset($_SESSION['userName'])) {
+                echo "Hello, " . $_SESSION['userName'] . "!";
+            } else {
+                echo "Hello, Guest!";
+            }            
+            ?>
         </div>
         <div class="right">
         </div>

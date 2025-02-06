@@ -1,3 +1,7 @@
+<?php
+require_once '../Control/auth.php';
+checkLogin();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

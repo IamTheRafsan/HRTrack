@@ -4,5 +4,6 @@
         <li><a href="EmployeeTasks.php">Tasks</a></li>
         <li><a href="EmployeeSalary.php">Salary</a></li>
         <li><a href="EmployeeLeave.php">Leave</a></li>
+        <li><a href="../Control/logout.php">Logout</a></li>
     </ul>
 </div>

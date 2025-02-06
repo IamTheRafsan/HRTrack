@@ -34,7 +34,5 @@ function validateEmployeeForm() {
         alert("Password must be at least 6 characters long.");
         return false;
     }
-
-    // If everything is valid, return true to submit the form
     return true;
 }
